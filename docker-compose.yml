@@ -1,0 +1,81 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quoteflow-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html  
+    environment:
+      APP_NAME: QuoteFlow
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: ${APP_KEY}
+      APP_URL: http://localhost:8080
+
+      LOG_CHANNEL: stderr
+
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: quoteflow_db
+      DB_USERNAME: quoteflow_user
+      DB_PASSWORD: quoteflow_password
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - quoteflow-network
+
+  db:
+    image: mysql:8.0.36
+    container_name: quoteflow-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: quoteflow_db
+      MYSQL_USER: quoteflow_user
+      MYSQL_PASSWORD: quoteflow_password
+      MYSQL_ROOT_PASSWORD: root_quoteflow_password
+    volumes:
+      - quoteflow_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - 127.0.0.1
+        - -uroot
+        - -proot_quoteflow_password
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - quoteflow-network
+
+  adminer:
+    image: adminer:4.8.1
+    container_name: quoteflow-adminer
+    restart: unless-stopped
+    profiles:
+      - tools
+    ports:
+      - "8081:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - quoteflow-network
+
+networks:
+  quoteflow-network:
+    driver: bridge
+
+volumes:
+  quoteflow_data:
+    name: quoteflow_data
