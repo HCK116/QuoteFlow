@@ -37,6 +37,14 @@ QuoteFlow uses a multi-container architecture consisting of:
 
 The application communicates with MySQL through a user-defined Docker bridge network using the service hostname `db`.
 
+### Docker Architecture Diagram
+
+![QuoteFlow Docker Architecture](docs/architecture.png)
+
+**View Full Diagram:** [Open Architecture Diagram](docs/architecture.png)
+
+For detailed architecture information, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 ### Port Configuration
 
 | Service | Port | Description |
