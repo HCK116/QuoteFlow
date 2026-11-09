@@ -258,8 +258,8 @@ The developer reviewed, tested, and evaluated the implementation and is responsi
 
 ## Project Links
 
-- **GitHub Repository:** [https://github.com/HCK116/QuoteFlow](https://github.com/HCK116/QuoteFlow)
-- **Article:** To be added
+- **GitHub Repository:** [QuoteFlow – GitHub](https://github.com/HCK116/QuoteFlow)
+- **Article:** [Implementasi Docker Compose pada QuoteFlow – Medium](https://medium.com/@hanskosasih08/implementasi-docker-compose-pada-quoteflow-membangun-aplikasi-laravel-dengan-mysql-dalam-cc6fdf46fa37)
 - **YouTube Demo:** To be added
 
 ## Author
