@@ -22,9 +22,9 @@ services:
       DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
-      DB_DATABASE: quoteflow_db
-      DB_USERNAME: quoteflow_user
-      DB_PASSWORD: quoteflow_password
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
@@ -38,8 +38,8 @@ services:
     environment:
       MYSQL_DATABASE: quoteflow_db
       MYSQL_USER: quoteflow_user
-      MYSQL_PASSWORD: quoteflow_password
-      MYSQL_ROOT_PASSWORD: root_quoteflow_password
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - quoteflow_data:/var/lib/mysql
     healthcheck:
@@ -50,7 +50,7 @@ services:
         - -h
         - 127.0.0.1
         - -uroot
-        - -proot_quoteflow_password
+        - -p${MYSQL_ROOT_PASSWORD}
       interval: 10s
       timeout: 5s
       retries: 10

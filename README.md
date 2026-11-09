@@ -1,59 +1,243 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# QuoteFlow – Supplier & Product Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+QuoteFlow is a web-based application built with Laravel, PHP, and Docker to manage supplier and product data through RESTful APIs.
 
-## About Laravel
+This project was developed as part of the Cloud Services course assignment. It demonstrates containerized application deployment, database integration, REST API implementation, and data persistence using Docker Compose.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Project Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Information | Details |
+|---|---|
+| Project Name | QuoteFlow |
+| Framework | Laravel |
+| Programming Language | PHP 8.4 |
+| Database | MySQL 8.0.36 |
+| Containerization | Docker & Docker Compose |
+| Web Server | Apache |
+| Architecture | Multi-container application |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Main Features
 
-## Learning Laravel
+- Supplier Management (Create, Read, Update, Delete)
+- Product Management (Create, Read, Update, Delete)
+- RESTful API endpoints
+- MySQL database integration
+- Docker multi-stage build
+- Persistent database storage using Docker named volume
+- Database healthcheck
+- Optional Adminer database management
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Architecture
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+QuoteFlow uses a multi-container architecture consisting of:
 
-## Laravel Sponsors
+1. **Application Container:** Laravel application running on PHP 8.4 and Apache.
+2. **Database Container:** MySQL 8.0.36 for storing application data.
+3. **Adminer Container:** Optional database management interface.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+The application communicates with MySQL through a user-defined Docker bridge network using the service hostname `db`.
 
-### Premium Partners
+### Port Configuration
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| Service | Port | Description |
+|---|---|---|
+| Laravel Application | 8080 | Application access |
+| Adminer | 8081 | Optional database management |
+| MySQL | 3306 | Internal Docker network |
 
-## Contributing
+## Requirements
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Before running this project, make sure you have:
 
-## Code of Conduct
+- Docker Desktop
+- Docker Compose
+- Git
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Installation and Setup
 
-## Security Vulnerabilities
+### 1. Clone Repository
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+git clone https://github.com/HCK116/QuoteFlow.git
+cd QuoteFlow
+```
 
-## License
+### 2. Create Environment File
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Copy the example environment file.
+
+**Windows PowerShell:**
+
+```powershell
+Copy-Item .env.example .env
+```
+
+**Linux/macOS:**
+
+```bash
+cp .env.example .env
+```
+
+Configure the required environment variables in `.env` according to the Docker Compose configuration.
+
+Make sure the application key and database credentials are configured correctly. Never upload the real `.env` file or expose application secrets.
+
+### 3. Build and Start Containers
+
+```bash
+docker compose up -d --build
+```
+
+### 4. Check Container Status
+
+```bash
+docker compose ps
+```
+
+Wait until the application container is running and the MySQL container reports `healthy`.
+
+### 5. Generate Application Key
+
+If `APP_KEY` is empty in your local `.env` file, generate it using:
+
+```bash
+docker compose exec app php artisan key:generate
+```
+
+Do not regenerate the key if one is already configured for an existing application environment.
+
+### 6. Run Database Migrations
+
+```bash
+docker compose exec app php artisan migrate
+```
+
+### 7. Access Application
+
+Health check endpoint:
+
+```text
+http://localhost:8080/health
+```
+
+Expected response:
+
+```json
+{
+    "status": "healthy",
+    "application": "QuoteFlow",
+    "version": "1.0.0"
+}
+```
+
+## API Endpoints
+
+Base URL:
+
+```text
+http://localhost:8080
+```
+
+### Health Check
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | Check application health |
+
+### Supplier API
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/suppliers` | Get all suppliers |
+| POST | `/api/suppliers` | Create a supplier |
+| GET | `/api/suppliers/{id}` | Get supplier by ID |
+| PUT | `/api/suppliers/{id}` | Update supplier |
+| DELETE | `/api/suppliers/{id}` | Delete supplier |
+
+### Product API
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/products` | Get all products |
+| POST | `/api/products` | Create a product |
+| GET | `/api/products/{id}` | Get product by ID |
+| PUT | `/api/products/{id}` | Update product |
+| DELETE | `/api/products/{id}` | Delete product |
+
+## Database Persistence
+
+QuoteFlow uses a Docker named volume called `quoteflow_data` to persist MySQL database data.
+
+The data remains available after containers are stopped and recreated using:
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+The named volume preserves database contents when containers are recreated.
+
+**Important:** Do not use `docker compose down -v` when you want to preserve database data, because this command removes the Compose-managed named volume.
+
+## Optional: Adminer
+
+Adminer can be started using the Docker Compose `tools` profile.
+
+```bash
+docker compose --profile tools up -d
+```
+
+Access Adminer at:
+
+```text
+http://localhost:8081
+```
+
+Use the following database connection settings:
+
+| Setting | Value |
+|---|---|
+| System | MySQL |
+| Server | `db` |
+| Username | `quoteflow_user` |
+| Password | Configured in local `.env` |
+| Database | `quoteflow_db` |
+
+## Testing Evidence
+
+The following screenshots document the application and Docker testing process:
+
+- Docker Compose container status
+- Application health check
+- Supplier API CRUD operations
+- Product API CRUD operations
+- Database persistence before and after container restart
+- Docker image information
+- PHP version and installed PHP extensions
+
+Screenshots can be added to this repository in a folder named `screenshots/`.
+
+## AI Usage Declaration
+
+AI tools were used as supporting tools during project development and documentation.
+
+**AI Tool Used:** ChatGPT
+
+AI assistance included:
+
+- Guidance on Dockerfile and Docker Compose configuration.
+- Assistance with Laravel REST API implementation.
+- Troubleshooting Docker, Laravel, and database configuration.
+- Assistance with project documentation and technical explanations.
+
+The developer reviewed, tested, and evaluated the implementation and is responsible for the submitted project.
+
+## Project Links
+
+- **GitHub Repository:** https://github.com/HCK116/QuoteFlow
+- **Article:** To be added
+- **YouTube Demo:** To be added
+
+## Author
+
+Developed as an academic project for the Cloud Services course.
