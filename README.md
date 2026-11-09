@@ -205,17 +205,33 @@ Use the following database connection settings:
 
 ## Testing Evidence
 
-The following screenshots document the application and Docker testing process:
+This repository includes **28 screenshots** documenting the application development and testing process.
+
+### 1. Supplier and Product CRUD Testing
+
+Contains screenshots showing the CRUD operations:
+
+- GET – Retrieve data
+- POST – Create new data
+- PUT – Update existing data
+- DELETE – Delete data
+- GET – Verify deleted data
+
+[View CRUD Testing Screenshots](screenshots/Bukti%20Pengujian%20CRUD%20QuoteFlow/)
+
+### 2. Docker and UTS Testing Evidence
+
+Contains screenshots documenting:
 
 - Docker Compose container status
 - Application health check
 - Supplier API CRUD operations
 - Product API CRUD operations
 - Database persistence before and after container restart
-- Docker image information
-- PHP version and installed PHP extensions
+- Docker PHP version
+- Installed PHP extensions
 
-Screenshots can be added to this repository in a folder named `screenshots/`.
+[View UTS Testing Screenshots](screenshots/Bukti%20UTS%20QuoteFlow/)
 
 ## AI Usage Declaration
 
@@ -234,7 +250,7 @@ The developer reviewed, tested, and evaluated the implementation and is responsi
 
 ## Project Links
 
-- **GitHub Repository:** https://github.com/HCK116/QuoteFlow
+- **GitHub Repository:** [https://github.com/HCK116/QuoteFlow](https://github.com/HCK116/QuoteFlow)
 - **Article:** To be added
 - **YouTube Demo:** To be added
 
