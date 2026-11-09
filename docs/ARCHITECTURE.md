@@ -1,5 +1,15 @@
 # QuoteFlow – Docker Architecture
 
+## Architecture Diagram
+
+Click the diagram to open the full-size image.
+
+[![QuoteFlow Docker Architecture](architecture.png)](architecture.png)
+
+**View Full Diagram:** [Click here to open the architecture image](architecture.png)
+
+---
+
 ## 1. Architecture Overview
 
 QuoteFlow uses a multi-container architecture managed by Docker Compose. The application consists of a Laravel application container and a MySQL database container. An optional Adminer container is available for database management.
@@ -8,21 +18,21 @@ QuoteFlow uses a multi-container architecture managed by Docker Compose. The app
 
 The application container runs Laravel using PHP 8.4 and Apache.
 
-- Service name: `app`
-- Container name: `quoteflow-app`
-- Internal port: `80`
-- Host port: `8080`
+- **Service name:** `app`
+- **Container name:** `quoteflow-app`
+- **Internal port:** `80`
+- **Host port:** `8080`
 
-Users can access the application through `http://localhost:8080`.
+Users can access the application through [http://localhost:8080](http://localhost:8080).
 
 ## 3. Database Container
 
 The database container uses MySQL 8.0.36.
 
-- Service name: `db`
-- Container name: `quoteflow-db`
-- Internal port: `3306`
-- Database: `quoteflow_db`
+- **Service name:** `db`
+- **Container name:** `quoteflow-db`
+- **Internal port:** `3306`
+- **Database:** `quoteflow_db`
 
 The Laravel application connects to MySQL using the Docker service hostname `db`, rather than `localhost`.
 
@@ -36,7 +46,14 @@ This allows the containers to communicate using their service names.
 
 QuoteFlow uses a Docker named volume called `quoteflow_data` to persist MySQL data.
 
-The volume ensures that database records remain available when containers are stopped and recreated using `docker compose down` and `docker compose up -d`.
+The volume ensures that database records remain available when containers are stopped and recreated using:
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+**Important:** Do not use `docker compose down -v` when you want to preserve database data, because this command removes the Compose-managed named volume.
 
 ## 6. Healthcheck and Service Dependency
 
@@ -48,15 +65,17 @@ The application service uses `depends_on` with the `service_healthy` condition s
 
 Adminer is available through the Docker Compose `tools` profile.
 
-- Host port: `8081`
-- Internal port: `8080`
-- Database server: `db`
+- **Host port:** `8081`
+- **Internal port:** `8080`
+- **Database server:** `db`
 
 It can be started using:
 
 ```bash
 docker compose --profile tools up -d
 ```
+
+Access Adminer at [http://localhost:8081](http://localhost:8081).
 
 ## 8. Request Flow
 
